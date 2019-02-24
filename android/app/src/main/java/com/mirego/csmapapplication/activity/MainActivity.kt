@@ -13,11 +13,11 @@ import com.mirego.csmapapplication.MapPingApplication
 import com.mirego.csmapapplication.R
 import com.mirego.csmapapplication.fragment.ListSegmentFragment
 import com.mirego.csmapapplication.fragment.MapSegmentFragment
-import com.mirego.csmapapplication.model.Repo
+import com.mirego.csmapapplication.model.MapEntry
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import javax.inject.Inject
-import com.mirego.csmapapplication.service.GitHubService
+import com.mirego.csmapapplication.service.MappingService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,13 +52,14 @@ class MainActivity : FragmentActivity() {
         downloadData()
     }
 
-    private fun downloadData() {
-        retrofit.create(GitHubService::class.java).listRepos("olivierpineau").enqueue(object : Callback<List<Repo>> {
-            override fun onFailure(call: Call<List<Repo>>?, t: Throwable?) {
+    private fun downloadData(): Response<List<MapEntry>> {
+        retrofit.create(MappingService::class.java).getMappingList().enqueue(object : Callback<List<MapEntry>> {
+            override fun onFailure(call: Call<List<MapEntry>>?, t: Throwable?) {
                 Log.d("street's test", "Oops")
             }
 
-            override fun onResponse(call: Call<List<Repo>>?, response: Response<List<Repo>>?) {
+            override fun onResponse(call: Call<List<MapEntry>>?, response: Response<List<MapEntry>>?) {
+                println(response?.body())
                 Log.d("street's test", "That's it")
             }
         })
